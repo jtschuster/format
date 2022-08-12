@@ -26,6 +26,7 @@ namespace Microsoft.CodeAnalysis.Tools
             {
                 WriteIndented = true
             };
+
             var formattedFilesJson = JsonSerializer.Serialize(formattedFiles, seralizerOptions);
 
             File.WriteAllText(reportFilePath, formattedFilesJson);

@@ -65,7 +65,9 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                     else
                     {
                         var loader = new DefaultAnalyzerAssemblyLoader();
+                        #pragma warning disable IL2026
                         analyzerAssembly = loader.LoadFromPath(path);
+                        #pragma warning restore IL2026
                     }
 
                     s_pathsToAssemblies.Add(path, analyzerAssembly);

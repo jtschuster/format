@@ -12,45 +12,45 @@ namespace Microsoft.CodeAnalysis.Tools.Utilities
     {
         private static readonly string[] s_extensions = new[] { "ni.dll", "ni.exe", "dll", "exe" };
 
-        internal static Assembly? TryResolveAssemblyFromPaths(AssemblyLoadContext context, AssemblyName assemblyName, string searchPath, Dictionary<string, Assembly>? knownAssemblyPaths = null, ILogger? logger = null)
-        {
-            logger?.LogTrace($"Trying to resolve assembly {assemblyName.FullName}.");
+        // internal static Assembly? TryResolveAssemblyFromPaths(AssemblyLoadContext context, AssemblyName assemblyName, string searchPath, Dictionary<string, Assembly>? knownAssemblyPaths = null, ILogger? logger = null)
+        // {
+        //     logger?.LogTrace($"Trying to resolve assembly {assemblyName.FullName}.");
 
-            foreach (var cultureSubfolder in string.IsNullOrEmpty(assemblyName.CultureName)
-                // If no culture is specified, attempt to load directly from
-                // the known dependency paths.
-                ? new[] { string.Empty }
-                // Search for satellite assemblies in culture subdirectories
-                // of the assembly search directories, but fall back to the
-                // bare search directory if that fails.
-                : new[] { assemblyName.CultureName, string.Empty })
-            {
-                foreach (var extension in s_extensions)
-                {
-                    var candidatePath = Path.Combine(
-                        searchPath, cultureSubfolder, $"{assemblyName.Name}.{extension}");
+        //     foreach (var cultureSubfolder in string.IsNullOrEmpty(assemblyName.CultureName)
+        //         // If no culture is specified, attempt to load directly from
+        //         // the known dependency paths.
+        //         ? new[] { string.Empty }
+        //         // Search for satellite assemblies in culture subdirectories
+        //         // of the assembly search directories, but fall back to the
+        //         // bare search directory if that fails.
+        //         : new[] { assemblyName.CultureName, string.Empty })
+        //     {
+        //         foreach (var extension in s_extensions)
+        //         {
+        //             var candidatePath = Path.Combine(
+        //                 searchPath, cultureSubfolder, $"{assemblyName.Name}.{extension}");
 
-                    var isAssemblyLoaded = knownAssemblyPaths?.ContainsKey(candidatePath) == true;
-                    if (isAssemblyLoaded || !File.Exists(candidatePath))
-                    {
-                        continue;
-                    }
+        //             var isAssemblyLoaded = knownAssemblyPaths?.ContainsKey(candidatePath) == true;
+        //             if (isAssemblyLoaded || !File.Exists(candidatePath))
+        //             {
+        //                 continue;
+        //             }
 
-                    var candidateAssemblyName = AssemblyLoadContext.GetAssemblyName(candidatePath);
-                    if (candidateAssemblyName.Version < assemblyName.Version)
-                    {
-                        continue;
-                    }
+        //             var candidateAssemblyName = AssemblyLoadContext.GetAssemblyName(candidatePath);
+        //             if (candidateAssemblyName.Version < assemblyName.Version)
+        //             {
+        //                 continue;
+        //             }
 
-                    var assembly = context.LoadFromAssemblyPath(candidatePath);
+        //             var assembly = context.LoadFromAssemblyPath(candidatePath);
 
-                    logger?.LogTrace($"Loaded assembly from {candidatePath}.");
+        //             logger?.LogTrace($"Loaded assembly from {candidatePath}.");
 
-                    return assembly;
-                }
-            }
+        //             return assembly;
+        //         }
+        //     }
 
-            return null;
-        }
+        //     return null;
+        // }
     }
 }

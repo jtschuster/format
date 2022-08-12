@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 
@@ -12,13 +13,16 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
 {
     internal static class AnalyzerFinderHelpers
     {
+        [UnconditionalSuppressMessageAttribute("IL", "2026")]
         public static AnalyzersAndFixers LoadAnalyzersAndFixers(IEnumerable<Assembly> assemblies)
         {
+#pragma warning disable IL2026
             var types = assemblies
                 .SelectMany(assembly => assembly.GetTypes()
                 .Where(type => !type.GetTypeInfo().IsInterface &&
                             !type.GetTypeInfo().IsAbstract &&
                             !type.GetTypeInfo().ContainsGenericParameters));
+#pragma warning restore IL2026
 
             var codeFixProviders = types
                 .Where(t => typeof(CodeFixProvider).IsAssignableFrom(t))

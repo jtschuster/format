@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the MIT license.  See License.txt in the project root for license information.
 
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
+using Serde;
 
 namespace Microsoft.CodeAnalysis.Tools
 {
@@ -22,4 +24,11 @@ namespace Microsoft.CodeAnalysis.Tools
             FileChanges = fileChanges;
         }
     }
+    // [JsonSourceGenerationOptions(WriteIndented = true)]
+    // [JsonSerializable(typeof(FormattedFile))]
+    // // [JsonSerializable(typeof(FormattedFile[]))]
+    // internal partial class SourceGenerationContexta : JsonSerializerContext
+    // {}
+    // [GenerateWrapper("FormattedFiles")]
+    // public partial record struct IEnumerableFormattedFilesWrap(IEnumerable<FormattedFile> FormattedFiles);
 }

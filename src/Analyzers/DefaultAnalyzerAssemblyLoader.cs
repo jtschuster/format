@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -109,8 +110,10 @@ namespace Microsoft.CodeAnalysis
                 _dependencyResolver = dependencyResolver;
             }
 
+            [UnconditionalSuppressMessageAttribute("IL", "2026")]
             protected override Assembly? Load(AssemblyName assemblyName)
             {
+#pragma warning disable IL2026
                 var simpleName = assemblyName.Name!;
                 if (_loader.AssemblySimpleNamesToBeLoadedInCompilerContext.Contains(simpleName))
                 {
@@ -170,8 +173,8 @@ namespace Microsoft.CodeAnalysis
 
                 Debug.Assert(bestCandidateName != null);
                 Debug.Assert(bestCandidatePath != null);
-
                 return LoadFromAssemblyPath(_loader.GetPathToLoad(bestCandidatePath));
+#pragma warning restore IL2026
             }
 
             protected override IntPtr LoadUnmanagedDll(string unmanagedDllName)

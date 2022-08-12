@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
 
@@ -53,6 +54,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
+        [UnconditionalSuppressMessage("IL", "2026")]
         public Assembly LoadFromPath(string fullPath)
         {
             Debug.Assert(Path.IsPathFullyQualified(fullPath));
@@ -65,6 +67,7 @@ namespace Microsoft.CodeAnalysis
         /// Returns the cached assembly for fullPath if we've done a load for this path before, or calls <see cref="LoadFromPathUncheckedImpl"/> if
         /// it needs to be loaded. This method skips the check in release builds that the path is an absolute path, hence the "Unchecked" in the name.
         /// </summary>
+        [RequiresUnreferencedCode("asdf")]
         protected Assembly LoadFromPathUnchecked(string fullPath)
         {
             Debug.Assert(Path.IsPathFullyQualified(fullPath));

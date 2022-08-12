@@ -16,13 +16,19 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
     public static class Extensions
     {
         private static Assembly MicrosoftCodeAnalysisFeaturesAssembly { get; }
+
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods)]
         private static Type IDEDiagnosticIdToOptionMappingHelperType { get; }
+
         private static MethodInfo TryGetMappedOptionsMethod { get; }
 
+        [UnconditionalSuppressMessage("IL", "2026")]
         static Extensions()
         {
-            MicrosoftCodeAnalysisFeaturesAssembly = Assembly.Load(new AssemblyName("Microsoft.CodeAnalysis.Features"));
+            MicrosoftCodeAnalysisFeaturesAssembly = typeof(Microsoft.CodeAnalysis.QuickInfo.QuickInfoItem).Assembly; //Assembly.Load(new AssemblyName("Microsoft.CodeAnalysis.Features"));
+#pragma warning disable IL2026
             IDEDiagnosticIdToOptionMappingHelperType = MicrosoftCodeAnalysisFeaturesAssembly.GetType("Microsoft.CodeAnalysis.Diagnostics.IDEDiagnosticIdToOptionMappingHelper")!;
+#pragma warning restore IL2026
             TryGetMappedOptionsMethod = IDEDiagnosticIdToOptionMappingHelperType.GetMethod("TryGetMappedOptions", BindingFlags.Static | BindingFlags.Public)!;
         }
 
@@ -30,7 +36,7 @@ namespace Microsoft.CodeAnalysis.Tools.Analyzers
                 => solutionChanges.GetProjectChanges()
                     .Any(x => x.GetChangedDocuments().Any() || x.GetChangedAdditionalDocuments().Any());
 
-        public static bool TryCreateInstance<T>(this Type type, [NotNullWhen(returnValue: true)] out T? instance) where T : class
+        public static bool TryCreateInstance<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)] T>([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)] this Type type, [NotNullWhen(returnValue: true)] out T? instance) where T : class
         {
             try
             {
